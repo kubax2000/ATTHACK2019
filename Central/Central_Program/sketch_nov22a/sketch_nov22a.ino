@@ -1,11 +1,9 @@
 
 TaskHandle_t Task1;
-TaskHandle_t Task2;
+
 
 void setup()
 {
-
-Serial.begin(115200);
 pinMode (32, INPUT);   //sensor 1 (sv) pin 1
 pinMode (33, INPUT);   //sensor 1 (jv) pin 2
 pinMode (34, INPUT);   //sensor 1 (jz) pin 3
@@ -15,20 +13,19 @@ pinMode (13, INPUT);   //sensor 2 (jv) pin 6
 pinMode (14, INPUT);   //sensor 2 (jz) pin 7
 pinMode (15, INPUT);   //sensor 2 (sz) pin 8
 pinMode (27, OUTPUT);  //semafor cervena
-pinMode (26, OUTPUT);  //
+pinMode (26, OUTPUT);  //semafor zluta
+pinMode (25, OUTPUT);  //semafor zelena
+pinMode (2, OUTPUT);   //semafor chodci cervena
+pinMode (4, OUTPUT);   //semafor chodci zelena
 
 
 
-xTaskCreatePinnedToCore
-  (
-  Task1code, "Task1", 10000, NULL, 1, &Task1, 0
-  );
-
+xTaskCreatePinnedToCore(Task1code, "Task1", 10000, NULL, 1, &Task1, 0);
 }
 
 byte pin[8] = {32, 33, 34, 35, 12, 13, 14, 15};
 float rychlost[4];
-int aut[4] = {0, 0, 0, 0);
+int aut[4] = {0, 0, 0, 0};
 
 
 bool stav[8];
@@ -51,7 +48,7 @@ void Task1code( void * pvParameters )
   
     while(true)
      {
-      for(int i = 0; i < 4; i++) if(zmena(pin[i])) 
+      for(int i = 0; i < 4; i++) if(zmena(pin[i]))
         {
         t[i] = millis();
         if(stav[i]) aut[i]++;
