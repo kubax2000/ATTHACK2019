@@ -9,13 +9,26 @@ const int pin_p_j = 3;
 const int pin_p_v = 4;
 const int pin_p_z = 7;
 
+bool p_s;
+bool p_j;
+bool p_v;
+bool p_z;
+
+bool z_p_s;
+bool z_p_j;
+bool z_p_v;
+bool z_p_z;
+
 int s_jas;
 int j_jas;
 int v_jas;
 int z_jas;
 int k_jas;
 
-long t;
+bool s_sviti;
+bool j_sviti;
+bool v_sviti;
+bool z_sviti;
 
 void setup() {    
     pinMode(s, OUTPUT);
@@ -33,25 +46,54 @@ void setup() {
 }
 
 void loop() {
-/*    s_jas += 10;
-    j_jas += 10;
-    v_jas += 10;
-    z_jas += 10;
-    k_jas += 10;
-    
-    if(s_jas >= 240) s_jas = 0;
-    if(j_jas >= 240) j_jas = 0;
-    if(v_jas >= 240) v_jas = 0;
-    if(z_jas >= 240) z_jas = 0;
-    if(k_jas >= 240) k_jas = 0;
-*/  
-    digitalRead(pin_p_s);
-    digitalRead(pin_p_j);
-    digitalRead(pin_p_v);
-    digitalRead(pin_p_z);
-    
-    if((pin_p_s == 1)&&(s_jas = 0)){
-          
+    p_s = digitalRead(pin_p_s);
+    Serial.println(p_s);
+    p_j = digitalRead(pin_p_j);
+    p_v = digitalRead(pin_p_v);
+    p_z = digitalRead(pin_p_z);
+
+/*
+    if(p_s == 0 && s_sviti == 1){
+      s_jas--;
+      //Serial.println(s_jas);     
+    }
+    if(s_jas = 0) s_sviti = 0;
+*/    
+
+    if(p_s == 1 && s_sviti == 0){
+      s_jas++;
+      //Serial.println(s_jas);     
+    }
+    if(s_jas >= 180) {
+      s_sviti = 1;
+      s_jas = 255;
+    }
+
+    if(p_j == 1 && j_sviti == 0){
+      j_jas++;
+      //Serial.println(j_jas);     
+    }
+    if(j_jas >= 180) {
+      j_sviti = 1;
+      j_jas = 255;
+    }
+
+    if(p_v == 1 && v_sviti == 0){
+      v_jas++;
+      //Serial.println(v_jas);     
+    }
+    if(v_jas >= 180) {
+      v_sviti = 1;
+      v_jas = 255;
+    }
+
+    if(p_z == 1 && z_sviti == 0){
+      z_jas++;
+      //Serial.println(z_jas);     
+    }
+    if(z_jas >= 180) {
+      z_sviti = 1;
+      z_jas = 255;
     }
     
     analogWrite(s, s_jas);
@@ -60,6 +102,6 @@ void loop() {
     analogWrite(z, z_jas);
     analogWrite(k, k_jas);
 
-    Serial.println(s_jas);
-    delay(100);
+    //Serial.println(s_jas);
+    delay(10);
 }
