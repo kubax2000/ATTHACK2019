@@ -39,7 +39,7 @@ void setup() {
     pinMode(pin_p_v, INPUT);
     pinMode(pin_p_z, INPUT);
 
-    pinMode(13, INPUT);
+    pinMode(A1, INPUT);
 
     pinMode(A0, INPUT);
 
@@ -62,8 +62,9 @@ void loop() {
     p_z = digitalRead(pin_p_z);
     ft = analogRead(A0);
 
-    car = digitalRead(13);
-    //Serial.println(car);
+    if(analogRead(A1) > 10) car = 1;
+    else car = 0;
+    Serial.println(car);
 
     if(ft < 800) {
       noc = 1;
@@ -78,14 +79,16 @@ void loop() {
     }
     //Serial.println(noc);
 
-    p_car = car;
+    
     
     if(car == 1 && noc == 1) {
       krizovatka.set(255);
     }
-    else if(p_car > car){
+    else if(p_car == 1 && car == 0){
       krizovatka.set(0);
     }
+
+    p_car = car;
 
     if(p_s == 1 && noc == 1) {
       sever.set(255);
