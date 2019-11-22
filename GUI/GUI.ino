@@ -17,12 +17,18 @@ char keys[ROWS][COLS] = {
 {'*','0','#','D'}
 };
 
+int lcd_col = 16;
+int lcd_row = 2;
+int Cursor = 0;
+
 byte colPins[COLS] = {5,4,3,2};
 byte rowPins[ROWS] = {9,8,7,6};
 bool login = false; 
 MFRC522 rfid(SDA_PIN, RST_PIN);
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3,POSITIVE);
 Keypad keypad = Keypad(makeKeymap(keys),rowPins,colPins,ROWS,COLS);
+
+String menu_opt[]= {"MENU", "ACCIDENT", "NORMAL", "OFF", "DISCO"};
 
 void def(){
   char Str1[]= "Welcome Indetify"; 
@@ -36,7 +42,42 @@ void def(){
     delay(150);
 }
 
-   
+void centerText(){
+    
+  
+  }
+char key;
+int opt = 1;
+void menu(char pressed){
+  lcd.clear();
+  
+  switch (pressed){
+    case 'A': 
+    
+    case 'B': 
+      
+          lcd.clear();
+          lcd.setCursor(0,0);
+          lcd.print(menu_opt[opt]);
+          lcd.setCursor(0,1);
+          lcd.print(menu_opt[opt+1]);
+          opt++;
+          if(opt<=4)opt=0;
+          break;
+      
+    case '#': 
+    
+    default:
+      lcd.setCursor(0,0);
+      lcd.print(menu_opt[0]);
+      lcd.setCursor(0,1);
+      lcd.print(menu_opt[1]);
+      break;
+  }
+  
+}
+
+
 void setup()
 {
   Wire.begin();
@@ -58,11 +99,11 @@ void loop()
     Serial.println("Login start");
     if ( ! rfid.PICC_IsNewCardPresent()) {
       return;
-    }
-    
+    }    
     if ( ! rfid.PICC_ReadCardSerial()) {
       return;
     }
+    
     String id= "";
     Serial.print("Card: "); 
     for( byte i = 0; i < rfid.uid.size; i++){
@@ -70,7 +111,7 @@ void loop()
     Serial.print(rfid.uid.uidByte[i], HEX);
     id.concat(String(rfid.uid.uidByte[i] < 0x10 ? "0" : " "));
     id.concat(String(rfid.uid.uidByte[i], HEX));
-  } 
+    } 
   
     Serial.println();
     Serial.print("Info: ");
@@ -79,8 +120,8 @@ void loop()
     {
       lcd.clear();
       lcd.setCursor(0,0); 
-      lcd.print("Authorizet access");
-      Serial.println("Authorized access");
+      lcd.print("Verified");
+      Serial.println("Authorizet access");
       Serial.println();
       rfid.PICC_HaltA();
       rfid.PCD_StopCrypto1();
@@ -88,11 +129,35 @@ void loop()
     }
    
     else   {
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("Access denied");
+      lcd.setCursor(0,1);
       Serial.println("Access denied");
+      Serial.println();
       delay(3000);
     }
   }
- 
+
+  key = keypad.getKey();
+  switch (key)
+  {
+  case NO_KEY: break;  // Nothing new
+
+
+  case 'A':  
+    Serial.println("UP");
+    break; // Handled above
+
+
+  case 'B': 
+    Serial.println("DWN");
+    break;
+  }
+
+  key = keypad.getKey();
+  menu(key);
+  
  
   delay(150);
 } 
