@@ -6,8 +6,13 @@ void setup()
 {
 
 Serial.begin(115200);
-pinMode (2, OUTPUT);
-pinMode (4, OUTPUT);
+pinMode (32, INPUT);   //sensor(sv)
+pinMode (33, INPUT);   //sensor(jv)
+pinMode (34, INPUT);   //sensor(jz)
+pinMode (35, INPUT);   //sensor(sz)
+
+
+
 
 
 
@@ -18,11 +23,31 @@ xTaskCreatePinnedToCore
 
 }
 
-void Task1code( void * pvParameters )
+bool stav[4];
+bool zmena(int pin)
   {
-    digitalWrite(2, HIGH);
+    bool x = digitalRead(pin);
+    bool y = stav[pin];
+    stav[pin] = x;
+    if(y != x) return 1;
+    return 0;
   }
 
+
+
+
+void Task1code( void * pvParameters )
+{
+  long t[4];  //pamet casu
+
+  
+    while(true)
+     {
+      for(i = 0; i < 4; i++) if(zmena(i + 32)) t[i] = millis();
+     // for(i = 0; i < 4; i++) if() t[i] = millis();
+      
+     }
+}
 
   
 void loop() 
