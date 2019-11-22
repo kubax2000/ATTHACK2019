@@ -24,6 +24,7 @@ bool p_z;
 
 bool noc;
 int ft;
+bool car;
 
 void setup() {
     pinMode(s, OUTPUT);
@@ -43,7 +44,7 @@ void setup() {
     jih.setTime(5000, true);
     vychod.setTime(5000, true);
     zapad.setTime(5000, true);
-    krizovatka.setTime(5500, true);
+    krizovatka.setTime(5000, true);
     
     Serial.begin(9600);
 }
@@ -57,7 +58,7 @@ void loop() {
     p_v = digitalRead(pin_p_v);
     p_z = digitalRead(pin_p_z);
     ft = analogRead(A0);
-    
+
     if(ft < 800) {
       noc = 1;
     }
@@ -71,13 +72,20 @@ void loop() {
     }
     //Serial.println(noc);
 
+    if(car == 1 && noc == 1) {
+      krizovatka.set(255);
+    }
+    else {
+      krizovatka.set(0);
+    }
+
     if(p_s == 1 && noc == 1) {
       sever.set(255);
       krizovatka.set(255);
     }
     else {
       sever.set(0);
-      if(1) krizovatka.set(0);
+      if(car = 0) krizovatka.set(0);
     }
 
     if(p_j == 1 && noc == 1) {
@@ -86,6 +94,7 @@ void loop() {
     }
     else {
       jih.set(0);
+      if(car = 0) krizovatka.set(0);
     }
 
     if(p_v == 1 && noc == 1) {
@@ -94,6 +103,7 @@ void loop() {
     }
     else {
       vychod.set(0);
+      if(car = 0) krizovatka.set(0);
     }
 
     if(p_z == 1 && noc == 1) {
@@ -102,6 +112,7 @@ void loop() {
     }
     else {
       zapad.set(0);
+      if(car = 0) krizovatka.set(0);
     }
     
 }
