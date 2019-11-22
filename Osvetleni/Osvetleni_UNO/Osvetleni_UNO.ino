@@ -25,6 +25,7 @@ bool p_z;
 bool noc;
 int ft;
 bool car;
+bool p_car;
 
 void setup() {
     pinMode(s, OUTPUT);
@@ -37,6 +38,8 @@ void setup() {
     pinMode(pin_p_j, INPUT);
     pinMode(pin_p_v, INPUT);
     pinMode(pin_p_z, INPUT);
+
+    pinMode(13, INPUT);
 
     pinMode(A0, INPUT);
 
@@ -53,11 +56,14 @@ void loop() {
     FadeLed::update();
 
     p_s = digitalRead(pin_p_s);
-    Serial.println(p_s);
+    //Serial.println(p_s);
     p_j = digitalRead(pin_p_j);
     p_v = digitalRead(pin_p_v);
     p_z = digitalRead(pin_p_z);
     ft = analogRead(A0);
+
+    car = digitalRead(13);
+    //Serial.println(car);
 
     if(ft < 800) {
       noc = 1;
@@ -72,10 +78,12 @@ void loop() {
     }
     //Serial.println(noc);
 
+    p_car = car;
+    
     if(car == 1 && noc == 1) {
       krizovatka.set(255);
     }
-    else {
+    else if(p_car > car){
       krizovatka.set(0);
     }
 
@@ -85,7 +93,6 @@ void loop() {
     }
     else {
       sever.set(0);
-      if(car = 0) krizovatka.set(0);
     }
 
     if(p_j == 1 && noc == 1) {
@@ -94,7 +101,6 @@ void loop() {
     }
     else {
       jih.set(0);
-      if(car = 0) krizovatka.set(0);
     }
 
     if(p_v == 1 && noc == 1) {
@@ -103,7 +109,6 @@ void loop() {
     }
     else {
       vychod.set(0);
-      if(car = 0) krizovatka.set(0);
     }
 
     if(p_z == 1 && noc == 1) {
@@ -112,7 +117,8 @@ void loop() {
     }
     else {
       zapad.set(0);
-      if(car = 0) krizovatka.set(0);
     }
+    
+    if(car == 0 && p_s == 0 && p_j == 0 && p_v == 0 && p_z == 0) krizovatka.set(0);
     
 }
