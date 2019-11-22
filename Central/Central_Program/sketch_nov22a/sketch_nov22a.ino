@@ -26,7 +26,7 @@ xTaskCreatePinnedToCore
 
 byte pin[8] = {32, 33, 34, 35, 12, 13, 14, 15};
 float rychlost[4];
-
+int aut[4] = {0, 0, 0, 0};
 
 
 bool stav[8];
@@ -49,7 +49,11 @@ void Task1code( void * pvParameters )
   
     while(true)
      {
-      for(int i = 0; i < 4; i++) if(zmena(pin[i])) t[i] = millis();
+      for(int i = 0; i < 4; i++) if(zmena(pin[i])) 
+        {
+        t[i] = millis();
+        if(stav[i]) aut[i]++;
+        }
       for(int i = 0; i < 4; i++) if(zmena(pin[i + 4])) rychlost[i] = 2 / (millis() - t[i]) * 1000; //vzdalennost senzoru = 2 m
 
 
@@ -65,7 +69,7 @@ void Task1code( void * pvParameters )
   
 void loop() 
 {
-digitalWrite(4, HIGH);
+
 
 
  
