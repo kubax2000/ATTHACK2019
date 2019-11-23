@@ -79,13 +79,10 @@ void getCharsPositions(String string) {
 
 void WiFiApplyCommand(int idUser, String stringData) {
   if(stringData.indexOf("GET /send-data") == 0 || stringData.indexOf("OPTIONS /send-data") == 0) {
+    getCharsPositions(stringData);
     String username = stringData.substring(g_char_backslashs[1] + 1, g_char_backslashs[2]);
     int millisToCome = stringData.substring(g_char_backslashs[2] + 1, g_char_backslashs[3]).toInt();
     String crosstype = stringData.substring(g_char_backslashs[3] + 1, g_char_backslashs[4]);
-
-    Serial.println(username);
-    Serial.println(millisToCome);
-    Serial.println(crosstype);
     
     int userId = -1;
     for(int i = 0; i < 50; i++) {

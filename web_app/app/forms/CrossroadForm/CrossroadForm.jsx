@@ -8,6 +8,7 @@ export default function CrossroadForm() {
     const [state, setState] = useState({crossroad_key: ''});
 
     const handleSelectChange = (event, data) => {
+        console.log(data);
         let newState = Object.assign({}, state);
         newState[data.name] = data.value;
         setState(newState);
