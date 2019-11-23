@@ -18,7 +18,7 @@ function fetchUrl(url, data, callback, method = 'GET') {
         requestOptions.body = JSON.stringify(HelpersServices.removeEmptyKeys(data));
     }
 
-    fetch('http://' + config.location + ':' + config.port + url, requestOptions)
+    fetch(config.location + ':' + config.port + url, requestOptions)
         .then(response => {
             if (!response.ok) {
                 if (401 === response.status) {

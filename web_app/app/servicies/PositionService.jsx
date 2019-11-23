@@ -5,8 +5,11 @@ export const PositionService = {
     run
 };
 
+const crossroadPosition = {latitude: 49.1750547, longitude: 16.5663547};
+
 const positionServiceData = {
     origin: {
+        cometime: 0,
         latitude: undefined,
         longitude: undefined,
         speed: undefined,
@@ -38,21 +41,31 @@ function position_success(position) {
             return;
         }
         if(undefined !== positionServiceData.origin.timestamp) {
-            let lat1 = positionServiceData.origin.latitude / (180 / Math.PI);
-            let lat2 = position.coords.latitude / (180 / Math.PI);
-            let lon1 = positionServiceData.origin.longitude / (180 / Math.PI);
-            let lon2 = position.coords.longitude / (180 / Math.PI);
+            let distance = getPointsDistance(positionServiceData.origin, position.coords);
+            let crossroadDistance = getPointsDistance(crossroadPosition, position.coords);
 
-            let dlon = lon2 - lon1;
-            let dlat = lat2 - lat1;
-            let a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon / 2), 2);
-
-            let c = 2 * Math.asin(Math.sqrt(a));
-
-            positionServiceData.origin.speed = (c * 6371 * 1.609344 * 1000000) / (position.timestamp - positionServiceData.origin.timestamp);
+            positionServiceData.origin.speed = distance / (position.timestamp - positionServiceData.origin.timestamp);
+            console.log(positionServiceData.origin.speed);
+            positionServiceData.origin.cometime = Math.round((crossroadDistance / positionServiceData.origin.speed) * 1000);
+            console.log(positionServiceData.origin.cometime);
         }
         positionServiceData.origin.latitude = position.coords.latitude;
         positionServiceData.origin.longitude = position.coords.longitude;
         positionServiceData.origin.timestamp = position.timestamp;
     }
+}
+
+function getPointsDistance(coords1, coords2) {
+    let lat1 = coords1.latitude / (180 / Math.PI);
+    let lat2 = coords2.latitude / (180 / Math.PI);
+    let lon1 = coords1.longitude / (180 / Math.PI);
+    let lon2 = coords2.longitude / (180 / Math.PI);
+
+    let dlon = lon2 - lon1;
+    let dlat = lat2 - lat1;
+    let a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon / 2), 2);
+
+    let c = 2 * Math.asin(Math.sqrt(a));
+
+    return Math.abs(c * 6371 * 1.609344 * 1000000);
 }
