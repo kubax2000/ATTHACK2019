@@ -6,7 +6,7 @@ bool setup4[2][5] = {{0, 0, 1, 1, 0}, {1, 0, 0, 0, 1}};
 
 bool modra[2] = {false, false};  //car with priority on ns(0), ew (1)
 int lid[2] = {0, 0};             //people waiting on ns(0), ew (1)
-
+byte mode = 0; //crossroad modes (default 0)
 
 void setup()
 {
@@ -33,6 +33,22 @@ void setup()
 
 }
 
+bool svetla[2][5];  //values of traffic lights
+
+int c = 0;
+void yellowLights()
+  {
+    if(c % 40 == 0) for (int i = 0; i < 2; i++) svetla[i][2] = !svetla[i][2];
+    c++;
+  }
+
+
+bool crossCheck()
+  {
+      return !((svetla[0][2] && svetla[1][4]) || (svetla[1][2] && svetla[0][4]));  //test of correct combination of green light
+  }
+
+
 
 byte pin[8] = {2, 3, 4, 5, 6, 7, 8, 9};
 float rychlost[4] = {0, 0, 0, 0}; //the speed of car/s from one side
@@ -40,7 +56,7 @@ int aut[4] = {0, 0, 0, 0};  //the number of cars coming from one side of the roa
 byte cnt = 0;
 
 bool stav[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-bool zmena(int pinnum)
+bool zmena(int pinnum)  //detekce zmeny hodnoty pinu (hrany obdelnikoveho signalu)
 {
   bool x = digitalRead(pin[pinnum]);
   bool y = stav[pinnum];
@@ -52,7 +68,7 @@ bool zmena(int pinnum)
 
 int delta = 0;  //auxiliary variable
 bool sempin[2][5] = {{10, 11, 12, 13, A0}, {A1, A2, A3, 0, 1}}; //traffic lights pins
-bool svetla[2][5];  //values of traffic lights
+
 bool aktual;  //actual open direction
 
 void crossSet(bool smer)  //sets the open direction of the crossroad
@@ -66,12 +82,10 @@ void crossSet(bool smer)  //sets the open direction of the crossroad
     case 3: for (int i = 0; i < 2; i++) for (int f = 0; f < 5; f++) svetla[i ^ smer][f] = setup4[i][f]; delta = millis(); cnt -= 10; cnt = 0; aktual = smer; break; //sets step 4
   }
   if (millis() > delta + 2000) cnt += 11; //waiting for 2 seconds each step
-  for (int i = 0; i < 2; i++) for (int f = 0; f < 5; f++) digitalWrite(sempin[i][f], svetla[i][f]); //sets the digital ouputs by the "svetla" field
-
 }
 
 
-byte body[0] = {0, 0};
+byte body[2] = {0, 0};
 
 void loop()
 {
@@ -92,15 +106,17 @@ void loop()
   }
 
   for(int i = 0; i < 2; i++) if(modra[i]) body[i] += 100;
+  
+switch(mode)
+{
+case 0: break;
+case 2: for (int i = 0; i < 2; i++) for(int f = 0; f < 5; f++) svetla[i][f] = 0; yellowLights(); break;
+case 3: for (int i = 0; i < 2; i++) for(int f = 0; f < 5; f++) svetla[i][f] = 0; break;
+default: break;
+}
 
-
-
-
-
-
-
-
-
+  for (int i = 0; i < 2; i++) for (int f = 0; f < 5; f++) digitalWrite(sempin[i][f], svetla[i][f]); //sets the digital ouputs by the "svetla" field
+  if(crossCheck()) mode = 2;
 
   delay(10);
 }
