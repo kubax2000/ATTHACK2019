@@ -89,14 +89,14 @@ bool aktual;
   if(aktual == smer) return;
   switch(cnt)
   {
-   case 0: for (int i = 0; i < 2; i++) for (int f = 0; f < 5; f++) svetla[i][f] = setup1[i][f]; delta = millis(); cnt -= 10; break;
-   case 1: for (int i = 0; i < 2; i++) for (int f = 0; f < 5; f++) svetla[i][f] = setup2[i][f]; delta = millis(); cnt -= 10; break;
-    
-    
+   case 0: for (int i = 0; i < 2; i++) for (int f = 0; f < 5; f++) svetla[i ^ smer][f] = setup1[i][f]; delta = millis(); cnt -= 10; break;
+   case 1: for (int i = 0; i < 2; i++) for (int f = 0; f < 5; f++) svetla[i ^ smer][f] = setup2[i][f]; delta = millis(); cnt -= 10; break;
+   case 2: for (int i = 0; i < 2; i++) for (int f = 0; f < 5; f++) svetla[i ^ smer][f] = setup3[i][f]; delta = millis(); cnt -= 10; break;
+   case 3: for (int i = 0; i < 2; i++) for (int f = 0; f < 5; f++) svetla[i ^ smer][f] = setup4[i][f]; delta = millis(); cnt -= 10; cnt = 0; aktual = smer; break;
    }
-
-      
-  
+  if(millis() > delta + 2000) cnt += 11;
+  for(int i = 0; i < 2; i++) for(int f = 0; f < 5; f++) digitalWrite(sempin[i][f], svetla[i][f]);
+    
   }
   
 
