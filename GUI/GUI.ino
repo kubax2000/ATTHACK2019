@@ -30,7 +30,7 @@ LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3,POSITIVE);
 Keypad keypad = Keypad(makeKeymap(keys),rowPins,colPins,ROWS,COLS);
 
 String menu_opt[]= {"------MENU------", "NORMAL", "OFF", "KEEP LIGHTS ON"};   //Options in menu
-byte data[] = {01 /*Normal*/,00 /*OFF*/,02 /*KEEP LIGHTS ON*/};     //Data of menu
+byte data[] = {00 /* = Normal*/,01 /* = OFF*/,02 /* = KEEP LIGHTS ON*/};     //Data of menu
 
 void def_Text(){            //function for default text, that displays on LCD              
   char Str1[]= "Welcome Indetify"; 
