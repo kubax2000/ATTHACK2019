@@ -36,7 +36,7 @@ void setup()
 bool svetla[2][5];  //values of traffic lights
 
 int c = 0;
-void yellowLights()
+void yellowLights() //blinking yellow lights on stanby
   {
     if(c % 40 == 0) for (int i = 0; i < 2; i++) svetla[i][2] = !svetla[i][2];
     c++;
