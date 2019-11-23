@@ -1,6 +1,8 @@
 #include "WiFi.h"
 #include <WiFiMulti.h>
 
+//#include <SoftwareSerial.h>
+
 #define MAX_CLIENTS_NUM 8
 #define SERVER_PORT 333
 const char* ssid     = "hackathon";
@@ -10,24 +12,17 @@ WiFiClient* clients[MAX_CLIENTS_NUM] = { NULL };
 
 WiFiMulti WiFiMulti;
 
-void setup() {
-    Serial.begin(115200);
+//SoftwareSerial mySerial(2, 4);
 
+void setup() {
+    //mySerial.begin(9600);
+    //mySerial.println("Hello, world?");
+    
     WiFiMulti.addAP("hackathon", "att4hack");
 
-    Serial.println();
-    Serial.println();
-    Serial.print("Waiting for WiFi... ");
-
     while(WiFiMulti.run() != WL_CONNECTED) {
-        Serial.print(".");
         delay(500);
     }
-
-    Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
   
     server.begin();
 }
@@ -40,16 +35,14 @@ String usersCrosstype[50];
 String usersName[50];
 int usersHelper = 0;
 
-
 void loop() {
   for(int i = 0; i < usersHelper; i++) {
     if(!sendedData[i] && (millis() - usersTimestamps[i]) >= (usersCometime[i] - 10000)) {
-      Serial.print("User wil come in 10 seconds: ");
-      Serial.println(usersName[i]);
+      //mySerial.println("Hello, world?");
       sendedData[i] = true;
     }
   }
-  
+
   WiFiRead();
 }
 
