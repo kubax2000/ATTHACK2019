@@ -65,11 +65,6 @@ void menu(char pressed){      //Menu options choose
           lcd.print(menu_opt[0]);
           lcd.setCursor(0,1);
           lcd.print(menu_opt[opt]); //changemenu option
-          Serial.print("actual opt: ");
-          Serial.println(opt);
-          Serial.println("UP");
-          Serial.print("after up: ");
-          Serial.println(opt);
           break;
           
     case 'B':         //Go down in menu
@@ -82,21 +77,12 @@ void menu(char pressed){      //Menu options choose
           lcd.print(menu_opt[0]);
           lcd.setCursor(0,1);
           lcd.print(menu_opt[opt]); //changemenu option
-          Serial.println("Down");
-          Serial.print("actual opt: ");
-          Serial.println(opt);
-          
-          Serial.print("after down: ");
-          Serial.println(opt);
-          
-          
           break;
           
       
     case '#': 
           Transmission(opt);
-          Serial.print("Sending: ");
-          Serial.println(data[opt]);
+          
     default:
       break;
   }
@@ -105,9 +91,10 @@ void menu(char pressed){      //Menu options choose
 
 
 void Transmit(int o){
-  Wire.beginTransmission();
-  Wire.write(data[o]);
-  Wire.endTransmission();  
+  Wire.beginTransmission(0x01); //+ pripoji se k jinemu chipu na adrese 0x04 pro posilani dat
+  Wire.write(data[o]);  //posle promennou x
+  Wire.endTransmission(); //ukonceni spojeni, nutne!
+  delay(50);
 }
 void menu_def(){        //Default menu, that shows after you logged in
   lcd.clear();
@@ -120,23 +107,26 @@ void setup()
 {
   Wire.begin(0x02);       // join i2c bus with address #0x02
   Wire.onReceive(receiveEvent); // register event
-  Serial.begin(9600);   // start serial for output
+  Wire.setClock(1000);   //frequency
   SPI.begin();
   rfid.PCD_Init();
   
-  Serial.println("Power ON"); 
+  
   lcd.begin(16,2);
+ 
+  
 }
+
 
 void receiveEvent(int howMany)
 {
   while(1 < Wire.available()) // loop through all but the last
   {
     char c = Wire.read(); // receive byte as a character
-    Serial.print(c);         // print the character
+    
   }
   int x = Wire.read();    // receive byte as an integer
-  Serial.println(x);         // print the integer
+  
 }
 void loop()
   {
@@ -152,16 +142,13 @@ void loop()
     }
     
     String id= "";    
-    Serial.print("Card: "); 
+    
     for( byte i = 0; i < rfid.uid.size; i++){         //Transfering tag to hex format
-    Serial.print(rfid.uid.uidByte[i] < 0x10 ? "0" : " ");
-    Serial.print(rfid.uid.uidByte[i], HEX);
     id.concat(String(rfid.uid.uidByte[i] < 0x10 ? "0" : " "));
     id.concat(String(rfid.uid.uidByte[i], HEX));
     } 
   
-    Serial.println();
-    Serial.print("Info: ");
+    
     
     id.toUpperCase();
     if (id.substring(1) == "59 5D 94 A2")   //Checking TAG if its autorized user
@@ -169,7 +156,6 @@ void loop()
       lcd.clear();
       lcd.setCursor(0,0); 
       lcd.print("Verified");
-      Serial.println("Authorizet access");
       rfid.PICC_HaltA();                //Ending and securing 
       rfid.PCD_StopCrypto1();
       login = true;               // variable is changet to true => user is logged. It wont detect Tag again.
@@ -182,7 +168,6 @@ void loop()
       lcd.setCursor(0,0);
       lcd.print("Access denied");
       lcd.setCursor(0,1);
-      Serial.println("Access denied");
       delay(3000);
     }
   }
