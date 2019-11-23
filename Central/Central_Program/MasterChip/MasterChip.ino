@@ -4,11 +4,14 @@ bool setup2[2][5] = {{1, 0, 0, 1, 0}, {1, 0, 0, 1, 0}};
 bool setup3[2][5] = {{1, 1, 0, 1, 0}, {1, 0, 0, 1, 0}};
 bool setup4[2][5] = {{0, 0, 1, 1, 0}, {1, 0, 0, 0, 1}};
 
+bool modra[2] = {false, false};  //car with priority on ns(0), ew (1)
+int lid[2] = {0, 0};             //people waiting on ns(0), ew (1)
+
 
 void setup()
 {
 
-  Serial.begin(9600);
+//  Serial.begin(9600);
   pinMode (2, INPUT);   //sensor 1 (sv) pin 0
   pinMode (3, INPUT);   //sensor 1 (jv) pin 1
   pinMode (4, INPUT);   //sensor 1 (jz) pin 2
@@ -68,8 +71,7 @@ void crossSet(bool smer)  //sets the open direction of the crossroad
 }
 
 
-byte body_sj = 0;
-byte body_zv = 0;
+byte body[0] = {0, 0};
 
 void loop()
 {
@@ -88,9 +90,8 @@ void loop()
       rychlost[i] = 2 / (float)(millis() - t[i]) * 1000;  //calculation of the speed (in m/s, the distance between the two buttons is 2 m
     }
   }
- 
 
-
+  for(int i = 0; i < 2; i++) if(modra[i]) body[i] += 100;
 
 
 
