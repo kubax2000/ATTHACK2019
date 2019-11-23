@@ -27,15 +27,14 @@ pinMode (A0, OUTPUT);   //semafor chodci zelena (sj)
 pinMode (A1, OUTPUT);  //semafor cervena (vz)
 pinMode (A2, OUTPUT);  //semafor zluta (vz)
 pinMode (A3, OUTPUT);  //semafor zelena (vz)
-pinMode (A4, OUTPUT);  //semafor chodci cervena (vz)
-pinMode (A5, OUTPUT);  //semafor chodci zelena (vz)
-
+pinMode (0, OUTPUT);  //semafor chodci cervena (vz)
+pinMode (1, OUTPUT);  //semafor chodci zelena (vz)
 
 }
 
 
 int delta = 0;
-bool sempin[2][5] = {{10, 11, 12, 13, A0},{A1, A2, A3, A4, A5}};
+bool sempin[2][5] = {{10, 11, 12, 13, A0},{A1, A2, A3, 0, 1}};
 byte pin[8] = {2, 3, 4, 5, 6, 7, 8, 9};
 float rychlost[4] = {0, 0, 0, 0};
 int aut[4] = {0, 0, 0, 0};
@@ -75,7 +74,7 @@ byte body_zv = 0;
   
 void loop() 
 {
-
+//pocitani s auticky
      long t[4];
       
       for(int i = 0; i < 4; i++) if(zmena(i) && stav[i])
@@ -90,6 +89,25 @@ void loop()
         rychlost[i] = 2 / (float)(millis() - t[i]) * 1000;  //vzdalennost senzoru = 2 m
         }
       } 
+//konec pocitani s auticky
+
+
+
+
+
+
+
+
+
+
+
 
   delay(10);
 }
+
+
+
+
+
+
+ 
