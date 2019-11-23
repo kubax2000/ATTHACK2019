@@ -1,0 +1,33 @@
+Allow from all
+
+# po tomto se zacala trvale zobrazovat ladenka, tj. bez erroru 324
+php_flag allow_call_time_pass_reference ON
+
+# eaccelerator zpusobuje na nekterych hostinzich problemy
+php_flag eaccelerator.enable 0
+php_flag eaccelerator.optimizer 0
+
+# povolime nahravani 10mb souboru
+php_value post_max_size 11M
+php_value upload_max_filesize 10M
+
+# disable directory listing
+Options -Indexes
+
+# enable cool URL
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	# RewriteBase /
+
+	# use HTTPS
+	# RewriteCond %{HTTPS} !on
+	# RewriteRule .? https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+	# prevents files starting with dot to be viewed by browser
+	RewriteRule /\.|^\. - [F]
+
+	# front controller
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule !\.(pdf|js|ico|gif|jpg|png|css|rar|zip|tar\.gz)$ index.html [L]
+</IfModule>

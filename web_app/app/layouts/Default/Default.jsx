@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
 import {Button, Container, Divider, Dropdown, Grid, Header, Icon, Image, List, Menu, Responsive, Segment, Sidebar, Visibility} from 'semantic-ui-react';
 
 export default function Default(props) {
@@ -8,9 +9,9 @@ export default function Default(props) {
                 <Container>
                     <Menu.Item as='a' header>
                         <Image size='mini' src='/logo.png' style={{marginRight: '1.5em'}}/>
-                        Project Name
+                        Smart Crossroad
                     </Menu.Item>
-                    <Menu.Item as='a'>Home</Menu.Item>
+                    <Menu.Item><Link to={''}>Home</Link></Menu.Item>
 
                     <Dropdown item simple text='Dropdown'>
                         <Dropdown.Menu>
@@ -33,19 +34,7 @@ export default function Default(props) {
             </Menu>
 
             <Container text style={{marginTop: '7em'}}>
-                <Header as='h1'>Semantic UI React Fixed Template</Header>
-                <p>This is a basic fixed menu template using fixed size containers.</p>
-                <p>
-                    A text container is used for the main container, which is useful for single column layouts.
-                </p>
-
-                <Image src='/images/wireframe/media-paragraph.png' style={{marginTop: '2em'}}/>
-                <Image src='/images/wireframe/paragraph.png' style={{marginTop: '2em'}}/>
-                <Image src='/images/wireframe/paragraph.png' style={{marginTop: '2em'}}/>
-                <Image src='/images/wireframe/paragraph.png' style={{marginTop: '2em'}}/>
-                <Image src='/images/wireframe/paragraph.png' style={{marginTop: '2em'}}/>
-                <Image src='/images/wireframe/paragraph.png' style={{marginTop: '2em'}}/>
-                <Image src='/images/wireframe/paragraph.png' style={{marginTop: '2em'}}/>
+                {undefined !== props.children && props.children}
             </Container>
 
             <Segment inverted vertical style={{margin: '5em 0em 0em', padding: '5em 0em'}}>

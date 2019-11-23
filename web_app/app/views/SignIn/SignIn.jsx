@@ -1,9 +1,13 @@
 import SignInForm from '../../forms/SignInForm/SignInForm.jsx';
+import React from 'react';
+import styles from './SignIn.module.sass';
 
-export default function SignIn() {
+export default function Homepage() {
     return (
-        <center>
-            <SignInForm />
-        </center>
+        <div className={styles.formBorder}>
+            <div className={styles.form}>
+                <SignInForm />
+            </div>
+        </div>
     );
 }

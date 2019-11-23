@@ -1,11 +1,13 @@
 import {createBrowserHistory} from 'history';
 import {Redirect, Route, Router, Switch} from 'react-router-dom';
 import layouts from '../layouts/index.jsx';
+import {PositionService} from '../servicies/PositionService.jsx';
 import React, {Component, Suspense} from 'react';
 import {UserService} from '../servicies/UserService.jsx';
 import views from '../views/index.jsx';
 
 export default function App() {
+    PositionService.run();
     const history = createBrowserHistory();
     UserService.setHistory(history);
     return (
