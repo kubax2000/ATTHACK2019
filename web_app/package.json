@@ -3,7 +3,7 @@
   "dependencies": {
     "chart.js": "^2.8.0",
     "jquery": "^3.4.1",
-    "jquery-ui": "^1.12.1",
+    "jquery-ui": "^1.13.2",
     "popper.js": "^1.15.0"
   },
   "devDependencies": {
